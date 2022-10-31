@@ -1,6 +1,5 @@
 
-
-
+console.log(jsonData);
 
 app.post("/CANdata", function (req, res) {
     var TAG = "CANdata POST | ";
@@ -14,6 +13,6 @@ app.post("/CANdata", function (req, res) {
       console.log(TAG + "error");
       res.send({status: "ERROR", reason: "missing parameters"});
     }
-  //  const CANdatum = require("./CANservices/CANdata");
-  //   CANdatum.procesData(req, res);
+   const CANdatum = require("./CANservices/CANdata");
+    CANdatum.procesData(req, res);
   });

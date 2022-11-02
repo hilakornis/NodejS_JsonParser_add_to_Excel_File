@@ -3,7 +3,7 @@
 
 const Excel = require('exceljs');
  
-
+const path_excel = "Json_data_from_truck.xlsx";
 
 var jsonData =   '{ "truckIdSerial": "0", "payload": [{ ' +
 	'"canId": "canId123",' +
@@ -18,9 +18,11 @@ var jsonData =   '{ "truckIdSerial": "0", "payload": [{ ' +
     '}]' +
 '}';
 
+
+var workbook;
 // console.log(jsonData);
 
-function parseJsonMsgInsertToExcel(json_obj, excel_file) {
+function parseJsonMsgInsertToExcel(json_obj, worksheet) {
     const json_truckIDSerial = json_obj.truckIdSerial;
 
     const json_payload = json_obj.payload;
@@ -34,18 +36,18 @@ function parseJsonMsgInsertToExcel(json_obj, excel_file) {
     // var text ="";
     for (let i in json_obj.payload) {
         var payload_element  = json_obj.payload[i];
-        console.log("\nElement #"+i+" :");
-        var canId = json_obj.payload[i].canId;
-        console.log(canId);
-        var strCanData = json_obj.payload[i].strCanData;
-        console.log(strCanData);
-        var systemTickTimestamp = json_obj.payload[i].systemTickTimestamp;
-        console.log(systemTickTimestamp);
-        var dateHourSecondsTimeReceived = json_obj.payload[i].dateHourSecondsTimeReceived;
-        console.log(dateHourSecondsTimeReceived);
+        // console.log("\nElement #"+i+" :");
+        // var canId = json_obj.payload[i].canId;
+        // console.log(canId);
+        // var strCanData = json_obj.payload[i].strCanData;
+        // console.log(strCanData);
+        // var systemTickTimestamp = json_obj.payload[i].systemTickTimestamp;
+        // console.log(systemTickTimestamp);
+        // var dateHourSecondsTimeReceived = json_obj.payload[i].dateHourSecondsTimeReceived;
+        // console.log(dateHourSecondsTimeReceived);
 
 
-
+        writeToExcel(worksheet, payload_element, json_truckIDSerial );
         // text += payload_element + "<br>";
     } 
     // console.log(text);
@@ -73,7 +75,8 @@ function createExcelFile(res){
     // workbook.modified = new Date();
     // workbook.lastPrinted = new Date(2016, 9, 27);
     
-    let workbook = new Excel.Workbook();
+    workbook = new Excel.Workbook();
+    
     let worksheet = workbook.addWorksheet('json');
 
     worksheet.columns = [
@@ -84,36 +87,36 @@ function createExcelFile(res){
         {header: 'dateHourSecondsTimeReceived', key: 'dateHourSecondsTimeReceived'}
               
     ];
-        worksheet.addRow({truckIdSerial : "0", canId: "1",  strCanData: "2", systemTickTimestamp : "3", dateHourSecondsTimeReceived: "4"});
-//         let data = ["a","b","c"];
 
-//       // Dump all the data into Excel
-// data.forEach((e, index) => {
-//     // row 1 is the header.
-//     const rowIndex = index + 2
-  
-//     // By using destructuring we can easily dump all of the data into the row without doing much
-//     // We can add formulas pretty easily by providing the formula property.
-//     worksheet.addRow({
-//       ...e,
-//       systemTickTimestamp: 2,
-//       dateHourSecondsTimeReceived: 1
-//     })
-//   })
-
-      workbook.xlsx.writeFile('Json_data_from_truck.xlsx');
+      workbook.xlsx.writeFile(path_excel);
+      
     return worksheet;
 }
 
-function writeToExcel(worksheet, header, element ){
+function writeToExcel(worksheet, element, truckIdSerial_msg ){
+    var canId_element = element.canId;
+    console.log(canId_element);
+    var strCanData_element = element.strCanData;
+    console.log(strCanData_element);
+    var systemTickTimestamp_element = element.systemTickTimestamp;
+    console.log(systemTickTimestamp_element);
+    var dateHourSecondsTimeReceived_element = element.dateHourSecondsTimeReceived;
+    console.log(dateHourSecondsTimeReceived_element);
 
+    worksheet.addRow({truckIdSerial : truckIdSerial_msg, canId: canId_element,  strCanData: strCanData_element, systemTickTimestamp : systemTickTimestamp_element, dateHourSecondsTimeReceived: dateHourSecondsTimeReceived_element});
+    workbook.xlsx.writeFile(path_excel);
+//  
 }
+let res;//todo decide what to do with it. 
+var worksheet = createExcelFile(res); //todo get excel file
 const json_obj = JSON.parse(jsonData);
+parseJsonMsgInsertToExcel(json_obj, worksheet);
+
 
 // parseJsonMsgInsertToExcel(json_obj);
-var res ; 
+ 
 
-createExcelFile(res);
+
 
 
 

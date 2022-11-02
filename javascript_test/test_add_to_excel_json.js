@@ -39,15 +39,10 @@ function parseJsonMsgInsertToExcel(json_obj) {
         // console.log(systemTickTimestamp);
         var dateHourSecondsTimeReceived = json_obj.payload[i].dateHourSecondsTimeReceived;
         // console.log(dateHourSecondsTimeReceived);
-
-
-
         try {
             if(!fs.existsSync(__dirname + '/CANdata/truck_messages.json')){
                 fs.writeFileSync(__dirname + '/CANdata/truck_messages.json', "[]");
             }
-        
-            if (fs.existsSync(__dirname + '/CANdata/truck_messages.json')) {
                 // Add the new area to covered_areas.json            
                 const data = fs.readFileSync(__dirname + '/CANdata/truck_messages.json');
                 // console.log('data = ' + data);
@@ -64,24 +59,12 @@ function parseJsonMsgInsertToExcel(json_obj) {
                 // console.log('jsonArray = ' + JSON.stringify(jsonArray, null, 1));    
                 fs.writeFileSync(__dirname + '/CANdata/truck_messages.json', JSON.stringify(jsonArray, null, 1));
     
-            } else {
-                console.log('/CANdata/truck_messages.json does not exists.');
-
-
-            }
-
-     
+            
     } catch (e) {
        console.log(e);
-
     }
-
-
   }
 }
-
-
-
 
 const json_msg = JSON.parse(jsonData);
 parseJsonMsgInsertToExcel(json_msg);
